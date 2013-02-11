@@ -9,13 +9,19 @@
                 $query .= 'select title,link from rss where url="http://feeds.feedburner.com/nczonline" limit 7;';
                 $query .= 'select title,link from rss where url="http://dmitrysoshnikov.com/feed/" limit 7;';
                 $query .= 'select title,link from rss where url="http://feeds.feedburner.com/addyosmani" limit 7;';
+                $query .= 'select title,link from rss where url="http://davidwalsh.name/feed" limit 7;';
 
                 $root = 'http://query.yahooapis.com/v1/public/yql?q=';
                 $yql = "select * from query.multi where queries='".$query."'";
                 $url = $root . urlencode($yql) . '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&diagnostics=false';  
+
+                /*
+                //access forbbiden robots.txt redirect
                 $davidxpath = " xpath=\"//div[@id=\'bigShow\']\"";
                 $davidquery = "select * from html where url=\"http://davidwalsh.name\"  and $davidxpath";
                 $bigShow = getBigShow($davidquery);
+                */
+
                 $content = get($url);
                 $data = json_decode($content);
 #for debug
@@ -91,6 +97,15 @@
                         }
 
                         $addy .= '</ul>';
+
+                $david = '<h2>davidwalsh.name</h2><ul>';
+ 
+                        foreach($results[7]->item as $r) {
+
+                              $david .='<li><a href="'.$r->link.'">'.$r->title.'</a></li>';
+                        }
+
+                        $david .= '</ul>';
 
                        
                 function get($url) {
@@ -203,8 +218,7 @@
 
     <div class="yui-gb">
         <div class="yui-u first" id="david">
-        <h2>davidwalsh.com</h2>
-        <?php echo$bigShow; ?>
+        <?php echo$david; ?>
         </div>
     </div>
 
